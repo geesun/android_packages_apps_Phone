@@ -163,6 +163,11 @@
         android:title="@string/other_settings"
         android:persistent="false" />
 
+     <CheckBoxPreference android:defaultValue="true"
+            android:key="pref_key_display_city"
+            android:summary="@string/pref_summary_display_city"
+            android:title="@string/pref_title_display_city" />
+
     <CheckBoxPreference
         android:key="button_voicemail_notification"
         android:title="@string/voicemail_notification_title"
