@@ -439,10 +439,10 @@ public class CallFeaturesSetting extends PreferenceActivity
     private static final String BUTTON_VIBRATE_CALL_WAITING = "button_vibrate_call_waiting";
     private CheckBoxPreference mButtonVibCallWaiting;
     static boolean mVibCallWaiting;
-    // static boolean mTurnSilence;
-    // Hide this option until it is fixed.
-    // private static final String BUTTON_TURN_SILENCE     = "button_turn_silence";
-    // private CheckBoxPreference mButtonTurnSilence;
+    static boolean mTurnSilence;
+
+    private static final String BUTTON_TURN_SILENCE     = "button_turn_silence";
+    private CheckBoxPreference mButtonTurnSilence;
     static boolean mLeftHand;
 
     private static final String BUTTON_LEFT_HAND        = "button_left_hand";
@@ -465,6 +465,12 @@ public class CallFeaturesSetting extends PreferenceActivity
     private static final String BUTTON_TRACKBALL_HANGUP = "button_trackball_hangup_timed";
     private ListPreference mTrackballHangup;
     static String mTrackHangup;
+
+    //Skip Spam Call Log start
+    private static final String BUTTON_SKIP_SPAM_CALLLOG = "button_skip_spam_calllog";
+    private ListPreference mListSkipSpamCalllog;
+    static int mSkipSpamCalllog;
+    //Skip Spam Call Log end
 
     private boolean mForeground;
 
@@ -571,9 +577,16 @@ public class CallFeaturesSetting extends PreferenceActivity
             }
         } else if (preference == mButtonSipCallOptions) {
             handleSipCallOptionsChange(objValue);
+        } else if (preference == mListSkipSpamCalllog) {
+            updateListSkipSpamCalllog((String)objValue);
         }
         // always let the preference setting proceed.
         return true;
+    }
+
+    private void updateListSkipSpamCalllog(String s) {
+        int i = mListSkipSpamCalllog.findIndexOfValue(s);
+        mListSkipSpamCalllog.setSummary(getResources().getStringArray(R.array.skipSpamCalllogLables)[i]);
     }
 
     private void handleNotificationChange(Object objValue) {
@@ -1603,8 +1616,8 @@ public class CallFeaturesSetting extends PreferenceActivity
         mButtonLedNotify.setChecked(mLedNotify);
         mButtonShowOrgan = (CheckBoxPreference) prefSet.findPreference(BUTTON_SHOW_ORGAN);
         mButtonShowOrgan.setChecked(mShowOrgan);
-        // mButtonTurnSilence = (CheckBoxPreference) prefSet.findPreference(BUTTON_TURN_SILENCE);
-        // mButtonTurnSilence.setChecked(mTurnSilence);
+        mButtonTurnSilence = (CheckBoxPreference) prefSet.findPreference(BUTTON_TURN_SILENCE);
+        mButtonTurnSilence.setChecked(mTurnSilence);
         mButtonLeftHand = (CheckBoxPreference) prefSet.findPreference(BUTTON_LEFT_HAND);
         mButtonLeftHand.setChecked(mLeftHand);
         mButtonVibCallWaiting = (CheckBoxPreference) prefSet
@@ -1627,6 +1640,12 @@ public class CallFeaturesSetting extends PreferenceActivity
         mTrackballAnswer.setValue(mTrackAnswer);
         mTrackballHangup = (ListPreference) prefSet.findPreference(BUTTON_TRACKBALL_HANGUP);
         mTrackballHangup.setValue(mTrackHangup);
+
+        mListSkipSpamCalllog = (ListPreference) prefSet.findPreference(BUTTON_SKIP_SPAM_CALLLOG);
+        mListSkipSpamCalllog.setOnPreferenceChangeListener(this);
+        String val = Integer.toString(mSkipSpamCalllog);
+        mListSkipSpamCalllog.setValue(val);
+        updateListSkipSpamCalllog(val);
 
         // No reason to show Trackball Answer & Hangup if it doesn't have a
         // Trackball.
@@ -2043,7 +2062,7 @@ public class CallFeaturesSetting extends PreferenceActivity
         mReturnHome = pref.getBoolean(BUTTON_RETURN_HOME, true);
         mLedNotify = pref.getBoolean(BUTTON_LED_NOTIFY, true);
         mShowOrgan = pref.getBoolean(BUTTON_SHOW_ORGAN, false);
-        //mTurnSilence = pref.getBoolean(BUTTON_TURN_SILENCE, false);
+        mTurnSilence = pref.getBoolean(BUTTON_TURN_SILENCE, false);
         mLeftHand = pref.getBoolean(BUTTON_LEFT_HAND, false);
         mVibCallWaiting = pref.getBoolean(BUTTON_VIBRATE_CALL_WAITING, false);
         mForceTouch = pref.getBoolean(BUTTON_FORCE_TOUCH,
@@ -2051,6 +2070,8 @@ public class CallFeaturesSetting extends PreferenceActivity
         // Trackball Answer & Hangup
         mTrackAnswer = pref.getString(BUTTON_TRACKBALL_ANSWER, "-1");
         mTrackHangup = pref.getString(BUTTON_TRACKBALL_HANGUP, "-1");
+
+        mSkipSpamCalllog = pref.getInt(BUTTON_SKIP_SPAM_CALLLOG, -1);
 
         ObjectInputStream ois = null;
         boolean correctVer = false;
@@ -2178,7 +2199,7 @@ public class CallFeaturesSetting extends PreferenceActivity
         outState.putBoolean(BUTTON_RETURN_HOME, mButtonReturnHome.isChecked());
         outState.putBoolean(BUTTON_LED_NOTIFY, mButtonLedNotify.isChecked());
         outState.putBoolean(BUTTON_SHOW_ORGAN, mButtonShowOrgan.isChecked());
-        // outState.putBoolean(BUTTON_TURN_SILENCE, mButtonTurnSilence.isChecked());
+        outState.putBoolean(BUTTON_TURN_SILENCE, mButtonTurnSilence.isChecked());
         outState.putBoolean(BUTTON_LEFT_HAND, mButtonLeftHand.isChecked());
         outState.putBoolean(BUTTON_VIBRATE_CALL_WAITING, mButtonVibCallWaiting.isChecked());
         outState.putBoolean(BUTTON_FORCE_TOUCH,
@@ -2186,7 +2207,8 @@ public class CallFeaturesSetting extends PreferenceActivity
         // Trackball Answer & Hangup
         outState.putString(BUTTON_TRACKBALL_ANSWER, mTrackballAnswer.getValue());
         outState.putString(BUTTON_TRACKBALL_HANGUP, mTrackballHangup.getValue());
-        outState.commit();
+        outState.putInt(BUTTON_SKIP_SPAM_CALLLOG, Integer.parseInt(mListSkipSpamCalllog.getValue()));
+        outState.apply();
         init(pref);
         super.onStop();
     }

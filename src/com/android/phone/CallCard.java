@@ -1158,7 +1158,6 @@ public class CallCard extends FrameLayout
             if(!TextUtils.isEmpty(info.phoneNumber)){
                 city = PhoneLocation.getCityFromPhone(info.phoneNumber);
             }
-
             if (DBG) log("- got personUri: '" + personUri
                          + "', based on info.person_id: " + info.person_id);
         } else {
@@ -1323,6 +1322,9 @@ public class CallCard extends FrameLayout
         // Other text fields:
         updateCallTypeLabel(call);
         updateSocialStatus(null, null, null);  // socialStatus is never visible in this state
+        // add for Chinese city funciton
+        mCity.setVisibility(View.GONE);
+
         // add for Chinese city funciton
         mCity.setVisibility(View.GONE);
 

@@ -50,10 +50,6 @@ import android.util.EventLog;
 import android.util.Log;
 
 import android.preference.PreferenceManager;
-import android.hardware.SensorManager;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorEvent;
-import android.hardware.Sensor;
 
 
 /**
@@ -188,7 +184,6 @@ public class CallNotifier extends Handler
     public CallNotifier(PhoneApp app, Phone phone, Ringer ringer,
                         BluetoothHandsfree btMgr, CallLogAsync callLog) {
         mSettings = CallFeaturesSetting.getInstance(PreferenceManager.getDefaultSharedPreferences(app));
-        //mSensorManager = (SensorManager) app.getSystemService(Context.SENSOR_SERVICE);
         mApplication = app;
         mCM = app.mCM;
         mCallLog = callLog;
@@ -476,7 +471,6 @@ public class CallNotifier extends Handler
         // - do this before showing the incoming call panel
         if (PhoneUtils.isRealIncomingCall(state)) {
             startIncomingCallQuery(c);
-            //startSensor();
         } else {
             if (mSettings.mVibCallWaiting) {
                 mApplication.vibrate(200,300,500);
@@ -1100,7 +1094,7 @@ public class CallNotifier extends Handler
         if (c != null) {
             final String number = c.getAddress();
             final long date = c.getCreateTime();
-            final long duration = c.getDurationMillis();
+            long duration = c.getDurationMillis();
             final Connection.DisconnectCause cause = c.getDisconnectCause();
             final Phone phone = c.getCall().getPhone();
 
@@ -1109,6 +1103,9 @@ public class CallNotifier extends Handler
             if (c.isIncoming()) {
                 callLogType = (cause == Connection.DisconnectCause.INCOMING_MISSED ?
                                Calls.MISSED_TYPE : Calls.INCOMING_TYPE);
+                if (cause == Connection.DisconnectCause.INCOMING_MISSED) {
+                    duration = System.currentTimeMillis() - date;
+                }
             } else {
                 callLogType = Calls.OUTGOING_TYPE;
             }
@@ -1151,7 +1148,9 @@ public class CallNotifier extends Handler
                 final boolean isEmergencyNumber = PhoneNumberUtils.isEmergencyNumber(number);
 
                 // Don't put OTA or CDMA Emergency calls into call log
-                if (!(isOtaNumber || isEmergencyNumber && shouldNotlogEmergencyNumber)) {
+                if (!(isOtaNumber || isEmergencyNumber && shouldNotlogEmergencyNumber)
+                        && !(callLogType == Calls.MISSED_TYPE &&     // Skip Spam Call Log
+                            duration < mSettings.mSkipSpamCalllog)) {  // by cytown
                     CallLogAsync.AddCallArgs args =
                             new CallLogAsync.AddCallArgs(
                                 mApplication, ci, logNumber, presentation,
@@ -1161,7 +1160,7 @@ public class CallNotifier extends Handler
                 }
             }
 
-            if (callLogType == Calls.MISSED_TYPE) {
+            if (callLogType == Calls.MISSED_TYPE && duration >= mSettings.mSkipSpamCalllog) { // Skip Spam Call Log
                 // Show the "Missed call" notification.
                 // (Note we *don't* do this if this was an incoming call that
                 // the user deliberately rejected.)
@@ -1260,53 +1259,7 @@ public class CallNotifier extends Handler
         if (VDBG) log("onCfiChanged(): " + visible);
         NotificationMgr.getDefault().updateCfi(visible);
     }
-/*
-    private SensorManager mSensorManager;
-    private boolean mSensorRunning = false;
-    private TurnListener mTurnListener = new TurnListener();
 
-    class TurnListener implements SensorEventListener {
-        int count = 0;
-        public void onSensorChanged(SensorEvent event) {
-            if (++count < 5) {  // omit the first 5 times
-                return;
-            }
-            float[] values = event.values;
-            // Log.i("==="," @ " + values[1] + " : " + values[2]);
-            if (count <= 7) {   // test 5 to 7 times
-                if (Math.abs(values[1]) > 15 || Math.abs(values[2]) > 20) {
-                    // Log.i("===","force stop sensor! @ " + values[1] + " : " + values[2]);
-                    stopSensor();
-                }
-            } else {
-                if (Math.abs(values[1]) > 165 && Math.abs(values[2]) < 20) {
-                    if (DBG) log("turn over!");
-                    silenceRinger();
-                }
-            }
-        }
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-    };
-
-    void stopSensor() {
-        if (mSensorRunning) {
-            if (DBG) log("stop sensor!");
-            mTurnListener.count = 0;
-            mSensorManager.unregisterListener(mTurnListener);
-            mSensorRunning = false;
-        }
-    }
-
-
-    void startSensor() {
-        if (mSettings.mTurnSilence && !mSensorRunning) {
-            if (DBG) log("startSensor()...");
-            mSensorManager.registerListener(mTurnListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-                    SensorManager.SENSOR_DELAY_NORMAL);
-            mSensorRunning = true;
-        }
-    }
-*/
     /**
      * Indicates whether or not this ringer is ringing.
      */
@@ -1322,7 +1275,6 @@ public class CallNotifier extends Handler
         mSilentRingerRequested = true;
         if (DBG) log("stopRing()... (silenceRinger)");
         // Log.i("===","silence sensor!");
-        //stopSensor();
         mRinger.stopRing();
     }
 

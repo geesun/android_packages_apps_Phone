@@ -116,11 +116,11 @@
         android:title="@string/set_force_touch"
         android:persistent="false"
         android:summary="@string/set_force_touch_sum"/>
-   <!-- <CheckBoxPreference
+    <CheckBoxPreference
         android:key="button_turn_silence"
         android:title="@string/turn_silence"
         android:persistent="false"
-        android:summary="@string/turn_silence_sum"/> -->
+        android:summary="@string/turn_silence_sum"/>
     <CheckBoxPreference
         android:key="button_left_hand"
         android:title="@string/left_hand"
@@ -142,6 +142,15 @@
         android:dialogTitle="@string/trackball_hangup" 
         android:persistent="false" />
     <!-- end Trackball Answer -->
+    <!-- Skip Spam Call Log start -->
+    <ListPreference android:key="button_skip_spam_calllog"
+        android:title="@string/skip_spam_calllog"
+        android:summary=""
+        android:entries="@array/skipSpamCalllogLables"
+        android:entryValues="@array/skipSpamCalllogValues"
+        android:dialogTitle="@string/skip_spam_calllog"
+        android:persistent="false" />
+    <!-- Skip Spam Call Log end -->
   <PreferenceScreen
         android:key="button_black_list"
         android:title="@string/black_list"
