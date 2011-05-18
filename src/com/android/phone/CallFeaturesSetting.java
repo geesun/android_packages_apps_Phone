@@ -436,6 +436,10 @@ public class CallFeaturesSetting extends PreferenceActivity
     private CheckBoxPreference mButtonForceTouch;
     static boolean mForceTouch;
 
+    private static final String ROTATE_INCALL_SCREEN      = "rotate_incall_screen";
+    private CheckBoxPreference mRotateIncallScreen;
+    static boolean mRotateIncall;
+
     private static final String BUTTON_VIBRATE_CALL_WAITING = "button_vibrate_call_waiting";
     private CheckBoxPreference mButtonVibCallWaiting;
     static boolean mVibCallWaiting;
@@ -1630,6 +1634,8 @@ public class CallFeaturesSetting extends PreferenceActivity
         } else {
             mButtonForceTouch.setChecked(mForceTouch);
         }
+        mRotateIncallScreen = (CheckBoxPreference) prefSet.findPreference(ROTATE_INCALL_SCREEN);
+        mRotateIncallScreen.setChecked(mRotateIncall);
         mButtonAddBlack = (EditPhoneNumberPreference) prefSet.findPreference(BUTTON_ADD_BLACK);
         mButtonAddBlack.setParentActivity(this, ADD_BLACK_LIST_ID, this);
         mButtonAddBlack.setDialogOnClosedListener(this);
@@ -2068,6 +2074,7 @@ public class CallFeaturesSetting extends PreferenceActivity
         mForceTouch = pref.getBoolean(BUTTON_FORCE_TOUCH,
                 PhoneUtils.isProximitySensorAvailable(PhoneApp.getInstance()));
         // Trackball Answer & Hangup
+        mRotateIncall = pref.getBoolean(ROTATE_INCALL_SCREEN, false);
         mTrackAnswer = pref.getString(BUTTON_TRACKBALL_ANSWER, "-1");
         mTrackHangup = pref.getString(BUTTON_TRACKBALL_HANGUP, "-1");
 
@@ -2204,6 +2211,7 @@ public class CallFeaturesSetting extends PreferenceActivity
         outState.putBoolean(BUTTON_VIBRATE_CALL_WAITING, mButtonVibCallWaiting.isChecked());
         outState.putBoolean(BUTTON_FORCE_TOUCH,
                 mButtonForceTouch == null || mButtonForceTouch.isChecked());
+        outState.putBoolean(ROTATE_INCALL_SCREEN, mRotateIncallScreen.isChecked());
         // Trackball Answer & Hangup
         outState.putString(BUTTON_TRACKBALL_ANSWER, mTrackballAnswer.getValue());
         outState.putString(BUTTON_TRACKBALL_HANGUP, mTrackballHangup.getValue());
