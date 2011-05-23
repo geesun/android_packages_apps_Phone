@@ -733,7 +733,8 @@
     <string name="left_hand_sum">用左手拿手机操作和接听电话, 需要重启.</string>
     <string name="set_force_touch">强制显示触摸键盘</string>
     <string name="set_force_touch_sum">强制在通话中使用触摸键盘无论是否有近距传感器.</string>
-
+    <string name="rotate_incall">启用重力旋转屏幕</string>
+    <string name="rotate_incall_sum">允许拨号时旋转屏幕.</string>
     <string name="per_change_mobile_network">更改网络 (2G/3G)</string>
     <string name="per_change_mobile_network_desc">包含此权限的应用程序可以更改网络设置, 在2G和3G网络之间切换. 3G速度更快, 耗电更多, 同时也会增加你的网络费用支出.</string>
     <string name="phone_number_label">手机号码</string>
