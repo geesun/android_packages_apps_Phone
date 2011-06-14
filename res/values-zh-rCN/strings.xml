@@ -726,6 +726,10 @@
     <string name="black_list">黑名单</string>
     <string name="black_list_sum">列入黑名单的来电会被自动挂断.</string>
     <string name="add_black">添加来电</string>
+    <string name="black_regex_title">使用通配符</string>
+    <string name="black_regex_summary">使用.作为通配符和*为重复符.例如：123.*阻止所有以123开头的号码， .*123.*阻止所有包含123的号码</string>
+
+
     <string name="remove_black">从名单中去除 %s</string>
     <string name="turn_silence">翻转静音</string>
     <string name="turn_silence_sum">来电时翻转就静音</string>
