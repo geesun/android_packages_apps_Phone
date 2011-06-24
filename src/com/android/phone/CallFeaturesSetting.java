@@ -440,6 +440,10 @@ public class CallFeaturesSetting extends PreferenceActivity
     private CheckBoxPreference mRotateIncallScreen;
     static boolean mRotateIncall;
 
+    private static final String BG_INCALL_SCREEN = "bg_incall_screen";
+    private CheckBoxPreference mBgIncallScreen;
+    static boolean mBgIncall;
+
     private static final String BUTTON_BLACK_REGEX = "button_black_regex";
     private CheckBoxPreference mButtonBlackRegex;
     static boolean mBlackRegex;
@@ -478,7 +482,10 @@ public class CallFeaturesSetting extends PreferenceActivity
     private static final String BUTTON_SKIP_SPAM_CALLLOG = "button_skip_spam_calllog";
     private ListPreference mListSkipSpamCalllog;
     static int mSkipSpamCalllog;
-    //Skip Spam Call Log end
+    //Hide Hold button
+    private static final String BUTTON_HIDE_HOLD_BUTTON = "button_hide_hold_button";
+    private CheckBoxPreference mButtonHideHoldButton;
+    static boolean mHideHoldButton;
 
     private boolean mForeground;
 
@@ -1676,6 +1683,8 @@ public class CallFeaturesSetting extends PreferenceActivity
         }
         mRotateIncallScreen = (CheckBoxPreference) prefSet.findPreference(ROTATE_INCALL_SCREEN);
         mRotateIncallScreen.setChecked(mRotateIncall);
+        mBgIncallScreen = (CheckBoxPreference) prefSet.findPreference(BG_INCALL_SCREEN);
+        mBgIncallScreen.setChecked(mBgIncall);
         mButtonAddBlack = (EditPhoneNumberPreference) prefSet.findPreference(BUTTON_ADD_BLACK);
         mButtonAddBlack.setParentActivity(this, ADD_BLACK_LIST_ID, this);
         mButtonAddBlack.setDialogOnClosedListener(this);
@@ -1710,6 +1719,8 @@ public class CallFeaturesSetting extends PreferenceActivity
                     .removePreference(mButtonAlwaysProximity);
         }
 //====
+        mButtonHideHoldButton = (CheckBoxPreference) prefSet.findPreference(BUTTON_HIDE_HOLD_BUTTON);
+        mButtonHideHoldButton.setChecked(mHideHoldButton);
     }
 
     private void createSipCallSettings() {
@@ -2117,8 +2128,10 @@ public class CallFeaturesSetting extends PreferenceActivity
                 PhoneUtils.isProximitySensorAvailable(PhoneApp.getInstance()));
         // Trackball Answer & Hangup
         mRotateIncall = pref.getBoolean(ROTATE_INCALL_SCREEN, false);
+        mBgIncall = pref.getBoolean(BG_INCALL_SCREEN, false);
         mTrackAnswer = pref.getString(BUTTON_TRACKBALL_ANSWER, "-1");
         mTrackHangup = pref.getString(BUTTON_TRACKBALL_HANGUP, "-1");
+        mHideHoldButton = pref.getBoolean(BUTTON_HIDE_HOLD_BUTTON, false);
         mBlackRegex = pref.getBoolean(BUTTON_BLACK_REGEX, false);
 
         mSkipSpamCalllog = pref.getInt(BUTTON_SKIP_SPAM_CALLLOG, -1);
@@ -2269,12 +2282,15 @@ public class CallFeaturesSetting extends PreferenceActivity
         outState.putBoolean(BUTTON_FORCE_TOUCH,
                 mButtonForceTouch == null || mButtonForceTouch.isChecked());
         outState.putBoolean(ROTATE_INCALL_SCREEN, mRotateIncallScreen.isChecked());
+        outState.putBoolean(BG_INCALL_SCREEN, mBgIncallScreen.isChecked());
         outState.putBoolean(BUTTON_BLACK_REGEX, mButtonBlackRegex.isChecked());
         // Trackball Answer & Hangup
         outState.putString(BUTTON_TRACKBALL_ANSWER, mTrackballAnswer.getValue());
         outState.putString(BUTTON_TRACKBALL_HANGUP, mTrackballHangup.getValue());
         outState.putInt(BUTTON_SKIP_SPAM_CALLLOG, Integer.parseInt(mListSkipSpamCalllog.getValue()));
         outState.apply();
+        outState.putBoolean(BUTTON_HIDE_HOLD_BUTTON, mButtonHideHoldButton.isChecked());
+        outState.commit();
         init(pref);
         super.onStop();
     }
