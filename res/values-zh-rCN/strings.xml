@@ -223,9 +223,6 @@
     <string name="roaming_disable" msgid="1843417228755568110">"漫游时连接到数据服务"</string>
     <string name="roaming_reenable_message" msgid="6973894869473170666">"数据连接已断，因为您已离开本地网络并已关闭数据漫游。"</string>
     <string name="roaming_warning" msgid="7820963598559553967">"是否允许数据漫游？这可能产生大量漫游费！"</string>
-    <string name="mvno_roaming">国内漫游</string>
-    <string name="mvno_roaming_summary">允许你在本国内使用其它电信运营商的服务</string>
-    <string name="mvno_roaming_warning">要在和你的电信运营相同的国家内启用漫游吗？某些虚拟电信运营商需要启用这个来设置一些资料。如果你的运营商需要对此收费，请“不要”启用这个选项！这项设置只有在重启手机或者切换到飞行模式并切回来的时候才会起效。</string>
     <string name="gsm_umts_options" msgid="6538311689850981686">"GSM/UMTS 选项"</string>
     <string name="cdma_options" msgid="4016822858172249884">"CDMA 选项"</string>
     <string name="throttle_data_usage" msgid="3715677828160555808">"数据使用情况"</string>
@@ -613,10 +610,8 @@
     <string name="calling_via_template" msgid="7374498518104190489">"通过 ^1"\n<b>"^2"</b>" 呼叫"
     </string>
     <string name="slide_to_answer" msgid="255903188611244476">"向右拖动以接听"</string>
-    <string name="rotate_to_answer">向右拨动以接听来电</string>
     <string name="slide_to_silence" msgid="2224982696981131553">"向左拖动以使振铃器静音"</string>
     <string name="slide_to_decline" msgid="7342094219435077069">"向左拖动以拒绝"</string>
-    <string name="rotate_to_decline">向左拨动以拒接来电</string>
     <string name="slide_to_answer_and_hold" msgid="9212596323067601245">"向右拖动以接听并"\n"保持当前通话"</string>
     <string name="slide_to_answer_and_end_active" msgid="6473719408670133380">"向右拖动以接听并"\n"结束当前通话"</string>
     <string name="slide_to_answer_and_end_onhold" msgid="638748048960663506">"向右拖动以接听并"\n"结束保持的通话"</string>
@@ -762,10 +757,6 @@
     <string name="mvno_roaming_warning">在同一个国家启用数据漫游服务.一些虚拟网络运营商需要此设置来访问数据.如果你的供应商收取国内漫游费不要启用该选项！此设置不会生效直到您重新启动手机或切换/恢复到飞行模式.</string>
     <string name="pref_summary_display_city">显示来/去电所在城市.</string>   
     <string name="pref_title_display_city">开启显示城市</string> 
-    <!-- Title displayed for the checkbox to (en|dis)able voicemail notifications. [CHAR LIMIT=NONE] -->
-    <string name="voicemail_notification_title">语音留言通知</string>
-    <!-- Summary for the checkbox to (en|dis)able voicemail notifications. [CHAR LIMIT=NONE] -->
-    <string name="voicemail_notification_summary">有新语音留言时通知.</string>
 
     <string name="rotate_to_answer">向右边反转接通电话</string>
     <string name="rotate_to_decline">向左边反转拒绝接通</string>
